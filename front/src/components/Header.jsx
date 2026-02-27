@@ -48,7 +48,7 @@ export default function Header({ balance, username, fmt, url }) {
           fontSize: 13, color: '#333', margin: '0 4px', display: 'flex', alignItems: 'center', gap: 4
         }}>
           <span style={{ color: '#aaa', fontSize: 11 }}>🌐</span>
-          www.maze-bank.com/{url}
+          www.cobank.com/{url}
           <span style={{ marginLeft: 'auto', color: '#http://localhost:3000/mainmenuaaa', fontSize: 11, cursor: 'pointer' }}>✕</span>
         </div>
         <div style={{ color: '#c8b400', fontWeight: 'bold', fontSize: 13, marginLeft: 4 }}>
