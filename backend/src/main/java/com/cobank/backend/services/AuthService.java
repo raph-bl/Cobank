@@ -14,7 +14,7 @@ import java.util.Optional;
 public class AuthService {
 
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder passwordEncoder;    
+    private final BCryptPasswordEncoder passwordEncoder;
 
     public AuthService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
@@ -35,7 +35,7 @@ public class AuthService {
         if(!passwordMatches) {
             return new RegisterResponse("error", "Invalid creds");
         }
-    
+
         return new RegisterResponse("success","Login successful");
     }
     
@@ -47,16 +47,16 @@ public class AuthService {
             "\nPassword: " + req.getPassword()  
         );
         */
-        User user = new User();
-        user.setFirstname(req.getFirstName());
-        user.setLastname(req.getLastName());        
-        user.setEmail(req.getEmail());
-        user.setPhoneNumber(req.getPhoneNumber());
+        // User user = new User();
+        // user.setFirstname(req.getFirstName());
+        // user.setLastname(req.getLastName());        
+        // user.setEmail(req.getEmail());
+        // user.setPhoneNumber(req.getPhoneNumber());
         
-        String hashedPassword = passwordEncoder.encode(req.getPassword());
-        user.setPassword(hashedPassword);
+        // String hashedPassword = passwordEncoder.encode(req.getPassword());
+        // user.setPassword(hashedPassword);
 
-        userRepository.save(user);
+        // userRepository.save(user);
 
         return new RegisterResponse("success", "User created in db!");  
     }
