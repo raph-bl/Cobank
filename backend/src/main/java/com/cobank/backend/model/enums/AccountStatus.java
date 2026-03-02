@@ -1,4 +1,4 @@
-package com.cobank.backend.model;
+package com.cobank.backend.model.enums;
 
 public enum AccountStatus {
     ACTIVE,

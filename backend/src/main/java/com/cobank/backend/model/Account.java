@@ -2,6 +2,8 @@ package com.cobank.backend.model;
 
 import java.time.LocalDateTime;
 
+import com.cobank.backend.model.enums.AccountStatus;
+
 import jakarta.persistence.*;
 
 @Entity

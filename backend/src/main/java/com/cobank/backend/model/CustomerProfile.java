@@ -3,6 +3,8 @@ package com.cobank.backend.model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.cobank.backend.model.enums.KycStatus;
+
 import jakarta.persistence.*;
 
 @Entity
