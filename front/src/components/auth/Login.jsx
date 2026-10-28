@@ -7,7 +7,8 @@ const BASE_H = 420;
 
 export default function Login() {
   const [scale, setScale] = useState(1);
-  const [form, setForm] = useState({ username: '', password: '' });
+  const [form, setForm] = useState({ email: '', password: '' });
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,25 +28,35 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
 
     try {
       const res = await fetch('http://localhost:8080/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: form.username, password: form.password }),
+        body: JSON.stringify({ email: form.email, password: form.password }),
       });
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        console.error('Login failed:', data);
+        setError(data.message || `Error ${res.status}`);
         return;
       }
 
-      await res.json();
+      const data = await res.json();
+
+      if (data.status === 'error') {
+        setError(data.message || 'Login failed');
+        return;
+      }
+
       localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('firstName', data.firstName ?? '');
+      localStorage.setItem('lastName', data.lastName ?? '');
       navigate('/dashboard');
     } catch (err) {
       console.error('Login error:', err);
+      setError('Could not reach the server.');
     }
   };
 
@@ -115,12 +126,12 @@ export default function Login() {
 
             <form onSubmit={handleSubmit}>
               <div style={{ marginBottom: 10 }}>
-                <label style={labelStyle}>USERNAME</label>
+                <label style={labelStyle}>EMAIL</label>
                 <input
                   style={inputStyle}
                   type="text"
-                  value={form.username}
-                  onChange={e => setForm({ ...form, username: e.target.value })}
+                  value={form.email}
+                  onChange={e => setForm({ ...form, email: e.target.value })}
                 />
               </div>
 
@@ -133,6 +144,12 @@ export default function Login() {
                   onChange={e => setForm({ ...form, password: e.target.value })}
                 />
               </div>
+
+              {error && (
+                <div style={{ fontSize: 11, color: '#B01010', marginBottom: 8, textAlign: 'center' }}>
+                  {error}
+                </div>
+              )}
 
               <button
                 type="submit"

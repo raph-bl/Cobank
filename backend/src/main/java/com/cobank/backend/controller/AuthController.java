@@ -5,6 +5,7 @@ import com.cobank.backend.dto.RegisterRequest;
 import com.cobank.backend.services.AuthService;
 import com.cobank.backend.dto.response.RegisterResponse;
 import com.cobank.backend.dto.LoginRequest;
+import com.cobank.backend.dto.response.LoginResponse;
 
 @RestController
 @RequestMapping("/auth")
@@ -21,7 +22,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public RegisterResponse login(@RequestBody LoginRequest req) {
+    public LoginResponse login(@RequestBody LoginRequest req) {
         return authService.login(req);
     }
 }

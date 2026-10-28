@@ -5,6 +5,9 @@ import Dashboard from './pages/Dashboard';
 import Deposit from './pages/Deposit';
 import Withdraw from './pages/Withdraw';
 import TransactionLog from './pages/TransactionLog';
+import Logout from './pages/Logout';
+import Settings from './pages/Settings';
+import Transfer from './pages/Transfer';
 
 export default function App() {
   return (
@@ -15,7 +18,10 @@ export default function App() {
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/deposit" element={<Deposit />} />
       <Route path="/withdraw" element={<Withdraw />} />
+      <Route path="/transfer" element={<Transfer />} />
       <Route path="/transaction-log" element={<TransactionLog />} />
+      <Route path="/settings" element={<Settings />} />
+      <Route path="/logout" element={<Logout />} />
     </Routes>
   );
 }

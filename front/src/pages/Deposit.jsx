@@ -7,7 +7,6 @@ const BASE_H = 420;
 
 export default function Deposit() {
   const [balance] = useState(100.00);
-  const username = "Username";
   const [scale, setScale] = useState(1);
   const navigate = useNavigate();
 
@@ -39,7 +38,7 @@ export default function Deposit() {
         boxShadow: '0 4px 32px rgba(0,0,0,0.5)',
         flexShrink: 0,
       }}>
-        <Header balance={balance} username={username} fmt={fmt} url="deposit" />
+        <Header balance={balance} fmt={fmt} url="deposit" />
 
         <div style={{
           flex: 1,

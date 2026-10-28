@@ -12,6 +12,8 @@ export default function Register() {
     last_name: '',
     phone_number: '',
     email: '',
+    country: '',
+    city: '',
     password: '',
     confirm: '',
   });
@@ -53,6 +55,8 @@ export default function Register() {
           phone_number: form.phone_number,
           email: form.email,
           password: form.password,
+          country: form.country,
+          city: form.city,
         }),
       });
 
@@ -88,8 +92,8 @@ export default function Register() {
     letterSpacing: '0.05em',
   };
 
-  const field = (label, key, type = 'text') => (
-    <div style={{ marginBottom: 8 }}>
+  const field = (label, key, type = 'text', span = 2) => (
+    <div style={{ marginBottom: 8, gridColumn: `span ${span}` }}>
       <label style={labelStyle}>{label}</label>
       <input
         style={inputStyle}
@@ -130,7 +134,7 @@ export default function Register() {
           <div style={{
             background: '#e8e8e8',
             border: '1px solid #aaa',
-            width: 380,
+            width: 540,
             padding: '16px 24px 18px',
           }}>
             <div style={{
@@ -146,13 +150,19 @@ export default function Register() {
             </div>
 
             <form onSubmit={handleSubmit}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 12px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '0 12px' }}>
                 {field('FIRSTNAME', 'first_name')}
                 {field('LASTNAME', 'last_name')}
                 {field('PHONE NUMBER', 'phone_number')}
+
                 {field('EMAIL', 'email', 'email')}
-                {field('PASSWORD', 'password', 'password')}
-                {field('CONFIRM PASSWORD', 'confirm', 'password')}
+                {field('COUNTRY', 'country')}
+                {field('CITY', 'city')}
+
+                <div style={{ gridColumn: 'span 6', borderTop: '1px solid #ccc', margin: '2px 0 10px' }} />
+
+                {field('PASSWORD', 'password', 'password', 3)}
+                {field('CONFIRM PASSWORD', 'confirm', 'password', 3)}
               </div>
 
               {error && (

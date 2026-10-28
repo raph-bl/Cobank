@@ -6,14 +6,16 @@ const BASE_W = 740;
 const BASE_H = 420;
 
 const menuItems = [
-  { label: 'Deposit', path: '/deposit' },
-  { label: 'Withdraw', path: '/withdraw' },
+  // { label: 'Deposit', path: '/deposit' },
+  // { label: 'Withdraw', path: '/withdraw' },
+  { label: 'Transfer', path: '/transfer' },
   { label: 'Transaction Log', path: '/transaction-log' },
+  { label: 'Settings', path: '/settings' },
+//  { label: 'Log Out', path: '/logout' },
 ];
 
 export default function Dashboard() {
   const [balance] = useState(100.00);
-  const username = "Username";
   const [scale, setScale] = useState(1);
   const navigate = useNavigate();
 
@@ -45,7 +47,7 @@ export default function Dashboard() {
         boxShadow: '0 4px 32px rgba(0,0,0,0.5)',
         flexShrink: 0,
       }}>
-        <Header balance={balance} username={username} fmt={fmt} url="mainmenu" />
+        <Header balance={balance} fmt={fmt} url="mainmenu" />
 
         <div style={{
           flex: 1,

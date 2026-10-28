@@ -20,31 +20,31 @@ public class CustomerProfile {
     @Column(nullable=false)
     private String lastName;
     
-    @Column(nullable = false)
+    @Column(nullable = true)
     private LocalDate birthDate;
     
-    @Column(nullable=false)
+    @Column(nullable=true)
     private String country;
     
-    @Column(nullable=false)
+    @Column(nullable=true)
     private String city;
     
-    @Column(nullable=false)
+    @Column(nullable=true)
     private String addressLine1;
-    
+
     private String addressLine2; 
 
-    @Column(nullable=false)
+    @Column(nullable=true)
     private String zipCode;
 
-    @Column(nullable=false)
+    @Column(nullable=true)
     private String phoneNumber;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = true)
     private KycStatus kycStatus = KycStatus.PENDING;
     // VERIFIED / PENDING / REJECTED / SUSPENDED
 

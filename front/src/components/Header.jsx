@@ -30,6 +30,13 @@ const Logo = () => (
 export default function Header({ balance, username, fmt, url }) {
   const navigate = useNavigate();
 
+  // Les pages authentifiées n'ont rien à passer : on lit la session.
+  // Login/Register passent explicitement "" pour garder le bandeau vide.
+  const display = username ?? [
+    localStorage.getItem('firstName'),
+    localStorage.getItem('lastName'),
+  ].filter(Boolean).join(' ');
+
   return (
     <>
       {/* Chrome navigateur */}
@@ -68,7 +75,7 @@ export default function Header({ balance, username, fmt, url }) {
       </div>
 
       <div style={{ background: '#7B1111', color: '#fff', padding: '7px 16px', fontSize: 14, fontWeight: '500' }}>
-        {username}
+        {display}
       </div>
 
       <div style={{ background: '#B01010', color: '#fff', textAlign: 'center', padding: '8px', fontSize: 14 }}>
