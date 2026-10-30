@@ -6,10 +6,17 @@ const BASE_W = 740;
 const BASE_H = 420;
 
 export default function Transfer() {
-  const [balance] = useState(100.00);
+  const [balance, setBalance] = useState(100.00);
   const [scale, setScale] = useState(1);
-  const [form, setForm] = useState({ email: '', password: '' });
+  const [form, setForm] = useState({ 
+    ibanDest: '', 
+    amount: ''
+  });
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [sending, setSending] = useState(false);
+  // Généré une fois par formulaire : rejouer la requête ne doit pas créer un 2e virement.
+  const [idempotencyKey, setIdempotencyKey] = useState(() => crypto.randomUUID());
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,7 +37,63 @@ export default function Transfer() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setSuccess('');
 
+    const sourceIban = localStorage.getItem('iban');
+
+    if (!sourceIban) {
+      setError('No account linked to this session. Please log in again.');
+      return;
+    }
+
+    if (form.ibanDest.trim() === '') {
+      setError('IBAN cannot be empty.');
+      return;
+    }
+
+    const amount = Number(form.amount);
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+      setError('Amount must be greater than zero.');
+      return;
+    }
+
+    setSending(true);
+
+    try {
+      const res = await fetch('http://localhost:8080/transaction/transfer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sourceIban,
+          destIban: form.ibanDest.trim(),
+          amount,
+          idempotencyKey,
+        }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      // Le backend répond 200 même sur rejet : c'est `status` qui tranche.
+      if (!res.ok || data.status !== 'success') {
+        setError(data.message ?? 'Transfer rejected.');
+        return;
+      }
+
+      setSuccess(data.message);
+
+      if (typeof data.balance === 'number') {
+        setBalance(data.balance);
+      }
+
+      setForm({ ibanDest: '', amount: '' });
+      setIdempotencyKey(crypto.randomUUID());
+    } catch (err) {
+      console.error('Transfer failed:', err);
+      setError('Transfer failed. Please try again later.');
+    } finally {
+      setSending(false);
+    }
   };
 
   const inputStyle = {
@@ -103,8 +166,8 @@ export default function Transfer() {
                 <input
                   style={inputStyle}
                   type="text"
-                  // value={form.email}
-                  // onChange={e => setForm({ ...form, email: e.target.value })}
+                  value={form.ibanDest}
+                  onChange={e => setForm({ ...form, ibanDest: e.target.value })}
                 />
               </div>
 
@@ -113,9 +176,10 @@ export default function Transfer() {
                 <input
                   style={inputStyle}
                   type="text"
+                  inputMode="decimal"
                   placeholder="0.00 €"
-                  // value={form.password}
-                  // onChange={e => setForm({ ...form, password: e.target.value })}
+                  value={form.amount}
+                  onChange={e => setForm({ ...form, amount: e.target.value })}
                 />
               </div>
 
@@ -125,18 +189,26 @@ export default function Transfer() {
                 </div>
               )}
 
+              {success && (
+                <div style={{ fontSize: 11, color: '#1A6B1A', marginBottom: 8, textAlign: 'center' }}>
+                  {success}
+                </div>
+              )}
+
               <button
                 type="submit"
+                disabled={sending}
                 style={{
                   width: '100%', padding: '8px 0',
-                  background: '#B01010', color: '#fff',
-                  border: 'none', fontSize: 13, cursor: 'pointer',
+                  background: sending ? '#999' : '#B01010', color: '#fff',
+                  border: 'none', fontSize: 13,
+                  cursor: sending ? 'default' : 'pointer',
                   letterSpacing: '0.05em', marginBottom: 8,
                 }}
-                onMouseEnter={e => e.currentTarget.style.background = '#8B0000'}
-                onMouseLeave={e => e.currentTarget.style.background = '#B01010'}
+                onMouseEnter={e => { if (!sending) e.currentTarget.style.background = '#8B0000'; }}
+                onMouseLeave={e => { if (!sending) e.currentTarget.style.background = '#B01010'; }}
               >
-                SEND
+                {sending ? 'SENDING...' : 'SEND'}
               </button>
 
               <div style={{ textAlign: 'center', fontSize: 11, color: '#555', marginTop: 8 }}>
